@@ -18,7 +18,6 @@ public class ClientService {
    * Method for adding {@link Client} with trimmed name to {@link ClientRepository}.
    *
    * @param clientRequest client request received from controller.
-   *
    * @return Client response that should be sent to client.
    */
   public ClientResponse addClient(ClientRequest clientRequest) {

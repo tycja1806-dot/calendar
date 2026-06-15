@@ -66,7 +66,8 @@ public class ClientTests {
     mockMvc.perform(
             MockMvcRequestBuilders.post("/api/clients").contentType("application/json").content(json))
         .andExpect(status().isBadRequest())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Name cannot be null or empty."));
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("$.message").value("Name cannot be null or empty."));
     Assertions.assertTrue(clientRepository.findAll().isEmpty());
   }
 
@@ -81,9 +82,11 @@ public class ClientTests {
     mockMvc.perform(
             MockMvcRequestBuilders.post("/api/clients").contentType("application/json").content(json))
         .andExpect(status().isBadRequest())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Name cannot be null or empty."));
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("$.message").value("Name cannot be null or empty."));
     Assertions.assertTrue(clientRepository.findAll().isEmpty());
   }
+
   @Test
   void addClient_shouldCreateClientWithTrimmedName() throws Exception {
     String json = """
