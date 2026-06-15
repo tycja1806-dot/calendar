@@ -1,3 +1,6 @@
+package org.example.taxcalendar;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -5,8 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.sql.Date;
+import jakarta.persistence.Table;
+import java.time.Instant;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.example.taxcalendar.client.Client;
 
 /**
  * This is model used to represent parent task in the database.
@@ -14,14 +21,21 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @NoArgsConstructor
+@Getter
+@Setter
+@Table(name = "liabilities-of-clients")
 public class ParentTask {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private Date dateStart;
-  private Date dateDeactivated;
+  @Column(name = "start_date")
+  private Instant dateStart;
+  @Column(name = "deactivated_date")
+  private Instant dateDeactivated;
+  @Column(name = "frequency")
   private TaskFreuquency taskFreuquency;
+  @Column(name = "reminder_time_days")
   private Integer reminderTimeDays;
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "client_id")

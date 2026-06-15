@@ -1,14 +1,16 @@
+package org.example.taxcalendar.client;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.sql.Date;
-import java.util.List;
+import java.time.Instant;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import lombok.Setter;
+import org.example.taxcalendar.ParentTask;
 
 /**
  * This is model used to represent single client in the database. It contains list of
@@ -17,14 +19,16 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "clients")
 @NoArgsConstructor
+@Getter
+@Setter
 public class Client {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
-  private Date dateDeactivated;
-  private Date dateActivated;
-  @OneToMany(fetch = FetchType.EAGER)
-  private List<ParentTask> parentTasks;
+  @Column(name = "deactivation_date")
+  private Instant dateDeactivated;
+  @Column(name = "creation_date", nullable = false)
+  private Instant creationDate;
 }
