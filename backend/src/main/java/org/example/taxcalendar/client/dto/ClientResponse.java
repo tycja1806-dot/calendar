@@ -1,6 +1,7 @@
-package org.example.taxcalendar.client;
+package org.example.taxcalendar.client.dto;
 
 import java.time.Instant;
+import org.example.taxcalendar.client.Client;
 
 /**
  * Response for {@link Client} operations.

@@ -58,7 +58,7 @@
         <configuration>
           <excludes>
             <exclude>**/dto/*</exclude>
-            <exclude>**/TcpManagerApplication.class</exclude>
+            <exclude>**/TaxCalendarApplication.class</exclude>
           </excludes>
         </configuration>
         <executions>

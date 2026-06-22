@@ -1,6 +1,7 @@
-package org.example.taxcalendar.client;
+package org.example.taxcalendar.client.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import org.example.taxcalendar.client.Client;
 
 /**
  * Request for {@link Client} operations.

@@ -1,7 +1,10 @@
 package org.example.taxcalendar.client;
 
 import java.time.Instant;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.example.taxcalendar.client.dto.ClientRequest;
+import org.example.taxcalendar.client.dto.ClientResponse;
 import org.springframework.stereotype.Service;
 
 /**
@@ -32,5 +35,11 @@ public class ClientService {
     return new ClientResponse(client.getId(), client.getName(), client.getCreationDate(),
         client.getDateDeactivated());
   }
+
+  public List<ClientResponse> getClients() {
+    return clientRepository.findAll().stream().map(this::changeClientToClientResponse).toList();
+
+  }
+
 
 }
