@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.taxcalendar.client.dto.ClientRequest;
 import org.example.taxcalendar.client.dto.ClientResponse;
+import org.example.taxcalendar.client.dto.ClientUpdate;
 import org.springframework.stereotype.Service;
 
 /**
@@ -57,6 +58,28 @@ public class ClientService {
   public ClientResponse getClientsId(long id) {
     Client foundClient = clientRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("Client with id " + id + " not found"));
+    return changeClientToClientResponse(foundClient);
+  }
+
+  /**
+   * Method for updating single client.
+   *
+   * @param id           id of a client.
+   * @param clientUpdate {@link ClientUpdate} DTO from request
+   * @return {@link ClientResponse} of updated client in database.
+   * @throws EntityNotFoundException when client is not found.
+   */
+  public ClientResponse updateClient(Long id, ClientUpdate clientUpdate) {
+    Client foundClient = clientRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Client with id " + id + " not found"));
+    if (clientUpdate.name() != null && !clientUpdate.name().isEmpty()) {
+      foundClient.setName(clientUpdate.name().trim());
+    }
+    if (clientUpdate.dateDeactivated() != null && clientUpdate.dateDeactivated()
+        .isAfter(foundClient.getCreationDate())) {
+      foundClient.setDateDeactivated(clientUpdate.dateDeactivated());
+    }
+    clientRepository.save(foundClient);
     return changeClientToClientResponse(foundClient);
   }
 }

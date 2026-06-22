@@ -4,6 +4,7 @@ package org.example.taxcalendar;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.Instant;
+import java.util.Optional;
 import org.example.taxcalendar.client.Client;
 import org.example.taxcalendar.client.ClientRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -135,9 +136,43 @@ public class ClientTests {
   @Test
   void findClientById_nonExistingClient_shouldReturnBadRequest() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders.get("/api/clients/9999"))
-        .andExpect(status().isBadRequest())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Client with id 9999 not found"));
+        .andExpect(status().isBadRequest()).andExpect(
+            MockMvcResultMatchers.jsonPath("$.message").value("Client with id 9999 not found"));
 
+  }
+
+  @Test
+  void updateClient_shouldUpdateClient() throws Exception {
+    Client client = getClient1();
+    client = clientRepository.save(client);
+    String json = """
+        {
+          "name": "testUpdate",
+          "dateDeactivated": "2026-01-01T01:00:00Z"
+        }
+        """;
+    mockMvc.perform(MockMvcRequestBuilders.patch("/api/clients/" + client.getId())
+            .contentType("application/json").content(json)).andExpect(status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("testUpdate")).andExpect(
+            MockMvcResultMatchers.jsonPath("$.dateDeactivated").value("2026-01-01T01:00:00Z"));
+    Optional<Client> foundClient = clientRepository.findById(client.getId());
+    Assertions.assertTrue(foundClient.isPresent());
+    Assertions.assertEquals("testUpdate", foundClient.get().getName());
+  }
+
+  @Test
+  void updateClient_shouldNotClient() throws Exception {
+
+    String json = """
+        {
+          "name": "testUpdate",
+          "dateDeactivated": "2026-01-01T01:00:00Z"
+        }
+        """;
+    mockMvc.perform(
+        MockMvcRequestBuilders.patch("/api/clients/9999").contentType("application/json")
+            .content(json)).andExpect(status().isBadRequest()).andExpect(
+        MockMvcResultMatchers.jsonPath("$.message").value("Client with id 9999 not found"));
   }
 
   private Client getClient1() {
@@ -153,5 +188,6 @@ public class ClientTests {
     client.setCreationDate(Instant.EPOCH);
     return client;
   }
+
 
 }

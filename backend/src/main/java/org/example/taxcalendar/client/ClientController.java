@@ -5,8 +5,10 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.taxcalendar.client.dto.ClientRequest;
 import org.example.taxcalendar.client.dto.ClientResponse;
+import org.example.taxcalendar.client.dto.ClientUpdate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,5 +43,13 @@ public class ClientController {
   public ClientResponse getClient(@PathVariable Long id) {
     return clientService.getClientsId(id);
   }
+
+  @PatchMapping(value = "/{id}", produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  public ClientResponse updateClient(@PathVariable Long id,
+      @RequestBody ClientUpdate clientUpdate) {
+    return clientService.updateClient(id, clientUpdate);
+  }
+
 
 }
