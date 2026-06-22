@@ -1,5 +1,6 @@
 package org.example.taxcalendar.client;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +37,26 @@ public class ClientService {
         client.getDateDeactivated());
   }
 
+  /**
+   * Method for getting all clients.
+   *
+   * @return List of {@link ClientResponse} of all clients in database.
+   */
   public List<ClientResponse> getClients() {
     return clientRepository.findAll().stream().map(this::changeClientToClientResponse).toList();
 
   }
 
-
+  /**
+   * Method for getting single client.
+   *
+   * @param id id of a client.
+   * @return {@link ClientResponse} of client in database.
+   * @throws EntityNotFoundException when client is not found.
+   */
+  public ClientResponse getClientsId(long id) {
+    Client foundClient = clientRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Client with id " + id + " not found"));
+    return changeClientToClientResponse(foundClient);
+  }
 }

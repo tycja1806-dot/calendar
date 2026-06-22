@@ -1,5 +1,6 @@
 package org.example.taxcalendar.gateway;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,5 +37,11 @@ public class GlobalExceptionHandler {
 
     return new ErrorResponse(Instant.now(), HttpStatus.BAD_REQUEST.value(),
         String.join(" ", errors));
+  }
+
+  @ExceptionHandler(EntityNotFoundException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public @ResponseBody ErrorResponse handleEntityNotFoundException(EntityNotFoundException ex) {
+    return new ErrorResponse(Instant.now(), HttpStatus.BAD_REQUEST.value(), ex.getMessage());
   }
 }

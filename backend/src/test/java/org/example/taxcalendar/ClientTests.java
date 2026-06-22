@@ -67,8 +67,7 @@ public class ClientTests {
 
     mockMvc.perform(
             MockMvcRequestBuilders.post("/api/clients").contentType("application/json").content(json))
-        .andExpect(status().isBadRequest())
-        .andExpect(
+        .andExpect(status().isBadRequest()).andExpect(
             MockMvcResultMatchers.jsonPath("$.message").value("Name cannot be null or empty."));
     Assertions.assertTrue(clientRepository.findAll().isEmpty());
   }
@@ -83,8 +82,7 @@ public class ClientTests {
 
     mockMvc.perform(
             MockMvcRequestBuilders.post("/api/clients").contentType("application/json").content(json))
-        .andExpect(status().isBadRequest())
-        .andExpect(
+        .andExpect(status().isBadRequest()).andExpect(
             MockMvcResultMatchers.jsonPath("$.message").value("Name cannot be null or empty."));
     Assertions.assertTrue(clientRepository.findAll().isEmpty());
   }
@@ -109,31 +107,49 @@ public class ClientTests {
   void findAllClients_displayAllClients() throws Exception {
     clientRepository.save(getClient1());
     clientRepository.save(getClient2());
-    mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/clients"))
-        .andExpect(status().isOk())
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/clients")).andExpect(status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(2))
         .andExpect(MockMvcResultMatchers.jsonPath("$.[0].name").value("test1"))
         .andExpect(MockMvcResultMatchers.jsonPath("$.[1].name").value("test2"));
 
   }
+
   @Test
   void findAllClients_displayAllClients_EmptyList() throws Exception {
-    mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/clients"))
-        .andExpect(status().isOk())
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/clients")).andExpect(status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(0));
 
   }
+
+  @Test
+  void findClientId_displayClientById_shouldReturnClient() throws Exception {
+    Client client = getClient1();
+    client = clientRepository.save(client);
+    clientRepository.save(getClient2());
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/clients/" + client.getId()))
+        .andExpect(status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(client.getName()));
+
+  }
+
+  @Test
+  void findClientById_nonExistingClient_shouldReturnBadRequest() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/clients/9999"))
+        .andExpect(status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Client with id 9999 not found"));
+
+  }
+
   private Client getClient1() {
     Client client = new Client();
-    client .setName("test1");
+    client.setName("test1");
     client.setCreationDate(Instant.now());
     return client;
   }
+
   private Client getClient2() {
     Client client = new Client();
-    client .setName("test2");
+    client.setName("test2");
     client.setCreationDate(Instant.EPOCH);
     return client;
   }
