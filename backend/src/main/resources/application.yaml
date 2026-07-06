@@ -1,0 +1,17 @@
+spring:
+  config:
+    import: classpath:.env[.properties]
+  application:
+    name: TaxCalendar
+  flyway:
+    enabled: true
+  jpa:
+    hibernate.ddl-auto: validate
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    url: ${POSTGRES_URL}
+server:
+  port: 8080
+
