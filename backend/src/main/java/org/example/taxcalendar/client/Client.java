@@ -10,7 +10,7 @@ import java.time.Instant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.taxcalendar.ParentTask;
+import org.example.taxcalendar.parentTasks.ParentTask;
 
 /**
  * This is model used to represent single client in the database. It contains list of

@@ -10,6 +10,7 @@ CREATE TABLE "clients"
 CREATE TABLE "liabilities-of-clients"
 (
     id                 BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name               TEXT      NOT NULL,
     client_id          BIGINT    NOT NULL,
     start_date         TIMESTAMP NOT NULL,
     deactivated_date   TIMESTAMP,

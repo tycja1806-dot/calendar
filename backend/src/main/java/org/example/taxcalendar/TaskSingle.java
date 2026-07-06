@@ -6,6 +6,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.sql.Date;
 import lombok.NoArgsConstructor;
+import org.example.taxcalendar.parentTasks.ParentTask;
 import org.springframework.data.annotation.Id;
 
 /**

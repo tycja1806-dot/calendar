@@ -1,4 +1,4 @@
-package org.example.taxcalendar;
+package org.example.taxcalendar.parentTasks;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +13,7 @@ import java.time.Instant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.taxcalendar.TaskFreuquency;
 import org.example.taxcalendar.client.Client;
 
 /**
@@ -29,6 +30,8 @@ public class ParentTask {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  @Column(name = "name")
+  private String name;
   @Column(name = "start_date")
   private Instant dateStart;
   @Column(name = "deactivated_date")

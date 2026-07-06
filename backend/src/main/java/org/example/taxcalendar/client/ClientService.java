@@ -33,7 +33,7 @@ public class ClientService {
     return changeClientToClientResponse(client);
   }
 
-  private ClientResponse changeClientToClientResponse(Client client) {
+  public static ClientResponse changeClientToClientResponse(Client client) {
     return new ClientResponse(client.getId(), client.getName(), client.getCreationDate(),
         client.getDateDeactivated());
   }
@@ -44,7 +44,7 @@ public class ClientService {
    * @return List of {@link ClientResponse} of all clients in database.
    */
   public List<ClientResponse> getClients() {
-    return clientRepository.findAll().stream().map(this::changeClientToClientResponse).toList();
+    return clientRepository.findAll().stream().map(ClientService::changeClientToClientResponse).toList();
 
   }
 
