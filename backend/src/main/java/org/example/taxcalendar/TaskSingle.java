@@ -6,7 +6,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.sql.Date;
 import lombok.NoArgsConstructor;
-import org.example.taxcalendar.parentTasks.ParentTask;
+import org.example.taxcalendar.parenttasks.ParentTask;
 import org.springframework.data.annotation.Id;
 
 /**
@@ -23,7 +23,7 @@ public class TaskSingle {
   private String nameTask;
   private Date dateCompletion;
   private Date deadline;
-  private TaskFreuquency taskFreuquency;
+  private TaskFrequency taskFrequency;
   private Date deactivationDate;
   @ManyToOne
   private ParentTask parentTask;

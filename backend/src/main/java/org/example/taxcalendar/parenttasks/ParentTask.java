@@ -1,4 +1,4 @@
-package org.example.taxcalendar.parentTasks;
+package org.example.taxcalendar.parenttasks;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +13,7 @@ import java.time.Instant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.taxcalendar.TaskFreuquency;
+import org.example.taxcalendar.TaskFrequency;
 import org.example.taxcalendar.client.Client;
 
 /**
@@ -37,7 +37,7 @@ public class ParentTask {
   @Column(name = "deactivated_date")
   private Instant dateDeactivated;
   @Column(name = "frequency")
-  private TaskFreuquency taskFreuquency;
+  private TaskFrequency taskFrequency;
   @Column(name = "reminder_time_days")
   private Integer reminderTimeDays;
   @ManyToOne(fetch = FetchType.EAGER)

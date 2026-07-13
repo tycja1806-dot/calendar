@@ -178,7 +178,7 @@ public class ClientTests {
   private Client getClient1() {
     Client client = new Client();
     client.setName("test1");
-    client.setCreationDate(Instant.now());
+    client.setCreationDate(Instant.parse("2025-01-01T01:00:00Z"));
     return client;
   }
 

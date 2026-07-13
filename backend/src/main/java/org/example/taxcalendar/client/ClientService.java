@@ -19,6 +19,11 @@ public class ClientService {
 
   private final ClientRepository clientRepository;
 
+  public static ClientResponse changeClientToClientResponse(Client client) {
+    return new ClientResponse(client.getId(), client.getName(), client.getCreationDate(),
+        client.getDateDeactivated());
+  }
+
   /**
    * Method for adding {@link Client} with trimmed name to {@link ClientRepository}.
    *
@@ -33,18 +38,14 @@ public class ClientService {
     return changeClientToClientResponse(client);
   }
 
-  public static ClientResponse changeClientToClientResponse(Client client) {
-    return new ClientResponse(client.getId(), client.getName(), client.getCreationDate(),
-        client.getDateDeactivated());
-  }
-
   /**
    * Method for getting all clients.
    *
    * @return List of {@link ClientResponse} of all clients in database.
    */
   public List<ClientResponse> getClients() {
-    return clientRepository.findAll().stream().map(ClientService::changeClientToClientResponse).toList();
+    return clientRepository.findAll().stream().map(ClientService::changeClientToClientResponse)
+        .toList();
 
   }
 
