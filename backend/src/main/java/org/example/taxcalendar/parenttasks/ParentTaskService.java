@@ -75,6 +75,13 @@ public class ParentTaskService {
         ClientService.changeClientToClientResponse(parentTask.getClient())
     );
   }
+  /**
+   * Method for update {@link ParentTask} by id.
+   *
+   * @param parentTaskRequestUpdate update request for the parent task.
+   * @param id the id of the parent task to update.
+   * @return the updated parent task response.
+   */
 
   @Transactional
   public ParentTaskResponse updateParentTask(ParentTaskRequestUpdate parentTaskRequestUpdate,
