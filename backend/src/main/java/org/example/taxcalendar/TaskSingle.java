@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import java.sql.Date;
 import lombok.NoArgsConstructor;
 import org.example.taxcalendar.parenttasks.ParentTask;
+import org.example.taxcalendar.parenttasks.TaskFrequency;
 import org.springframework.data.annotation.Id;
 
 /**

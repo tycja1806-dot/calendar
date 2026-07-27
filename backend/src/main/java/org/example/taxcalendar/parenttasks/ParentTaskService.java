@@ -1,11 +1,14 @@
 package org.example.taxcalendar.parenttasks;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.taxcalendar.client.Client;
 import org.example.taxcalendar.client.ClientRepository;
 import org.example.taxcalendar.client.ClientService;
 import org.example.taxcalendar.parenttasks.dto.ParentTaskRequest;
+import org.example.taxcalendar.parenttasks.dto.ParentTaskRequestUpdate;
 import org.example.taxcalendar.parenttasks.dto.ParentTaskResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,8 +52,6 @@ public class ParentTaskService {
    * @param id client request received from controller.
    */
 
-
-  @Transactional
   public ParentTaskResponse getParentTaskId(Long id) {
     ParentTask parentTask = parentTaskRepository.findById(id)
         .orElseThrow(
@@ -58,7 +59,6 @@ public class ParentTaskService {
     return mapToParentTaskResponse(parentTask);
   }
 
-  @Transactional
   public List<ParentTaskResponse> getParentTaskAll() {
     List<ParentTask> parentTask = parentTaskRepository.findAll().stream().toList();
     return parentTask.stream().map(this::mapToParentTaskResponse).toList();
@@ -74,5 +74,36 @@ public class ParentTaskService {
         parentTask.getReminderTimeDays(),
         ClientService.changeClientToClientResponse(parentTask.getClient())
     );
+  }
+
+  @Transactional
+  public ParentTaskResponse updateParentTask(ParentTaskRequestUpdate parentTaskRequestUpdate,
+      Long id) {
+    ParentTask parentTaskToUpdate = parentTaskRepository.findById(id)
+        .orElseThrow(
+            () -> new IllegalArgumentException("Parent task with id " + id + " not found"));
+    String nameUpdate = parentTaskRequestUpdate.name();
+    if (nameUpdate != null) {
+      parentTaskToUpdate.setName(nameUpdate);
+    }
+    LocalDate dateStartUpdate = parentTaskRequestUpdate.dateStart();
+    if (dateStartUpdate != null) {
+      parentTaskToUpdate.setDateStart(dateStartUpdate);
+    }
+    LocalDate dateDeactivatedUpdate = parentTaskRequestUpdate.dateDeactivated();
+    if (dateDeactivatedUpdate != null && dateDeactivatedUpdate.isAfter(
+        parentTaskToUpdate.getDateStart())) {
+      parentTaskToUpdate.setDateDeactivated(dateDeactivatedUpdate);
+    }
+    TaskFrequency taskFrequencyUpdate = parentTaskRequestUpdate.taskFrequency();
+    if (taskFrequencyUpdate != null) {
+      parentTaskToUpdate.setTaskFrequency(taskFrequencyUpdate);
+    }
+    Integer reminderTimeDaysUpdate = parentTaskRequestUpdate.reminderTimeDays();
+    if (reminderTimeDaysUpdate != null) {
+      parentTaskToUpdate.setReminderTimeDays(reminderTimeDaysUpdate);
+    }
+    parentTaskToUpdate = parentTaskRepository.save(parentTaskToUpdate);
+    return mapToParentTaskResponse(parentTaskToUpdate);
   }
 }

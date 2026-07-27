@@ -1,14 +1,14 @@
 package org.example.taxcalendar;
 
 
-import static java.time.Instant.EPOCH;
-
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import org.example.taxcalendar.client.Client;
 import org.example.taxcalendar.client.ClientRepository;
 import org.example.taxcalendar.parenttasks.ParentTask;
 import org.example.taxcalendar.parenttasks.ParentTasksRepository;
+import org.example.taxcalendar.parenttasks.TaskFrequency;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -45,6 +45,26 @@ public class ParentTasksTest {
   @Autowired
   private MockMvc mockMvc;
 
+  private static @NotNull ParentTask getParentTask1(Client client) {
+    ParentTask parentTaskSave = new ParentTask();
+    parentTaskSave.setName("test");
+    parentTaskSave.setDateStart(LocalDate.EPOCH);
+    parentTaskSave.setTaskFrequency(TaskFrequency.MONTHLY);
+    parentTaskSave.setReminderTimeDays(1);
+    parentTaskSave.setClient(client);
+    return parentTaskSave;
+  }
+
+  private static @NotNull ParentTask getParentTask2(Client client) {
+    ParentTask parentTaskSave = new ParentTask();
+    parentTaskSave.setName("test22");
+    parentTaskSave.setDateStart(LocalDate.EPOCH);
+    parentTaskSave.setTaskFrequency(TaskFrequency.YEARLY);
+    parentTaskSave.setReminderTimeDays(15);
+    parentTaskSave.setClient(client);
+    return parentTaskSave;
+  }
+
   @AfterEach
   void tearDown() {
     parentTasksRepository.deleteAll();
@@ -57,7 +77,7 @@ public class ParentTasksTest {
     String parentJson = """
         {
           "name": "test",
-          "dateStart": "2021-02-02T12:00:00Z",
+          "dateStart": "2021-02-02",
           "taskFrequency": "MONTHLY",
           "reminderTimeDays": 1,
           "clientId": %d
@@ -74,7 +94,7 @@ public class ParentTasksTest {
     Assertions.assertSame(parentTask.getClient().getId(), client.getId());
     Assertions.assertEquals("test", parentTask.getName());
     Assertions.assertEquals(TaskFrequency.MONTHLY, parentTask.getTaskFrequency());
-    Assertions.assertEquals("2021-02-02T12:00:00Z", parentTask.getDateStart().toString());
+    Assertions.assertEquals("2021-02-02", parentTask.getDateStart().toString());
     Assertions.assertEquals(1, parentTask.getReminderTimeDays());
   }
 
@@ -83,7 +103,7 @@ public class ParentTasksTest {
     Client client = addClient();
     ParentTask parentTaskSave = new ParentTask();
     parentTaskSave.setName("test");
-    parentTaskSave.setDateStart(Instant.EPOCH);
+    parentTaskSave.setDateStart(LocalDate.EPOCH);
     parentTaskSave.setTaskFrequency(TaskFrequency.MONTHLY);
     parentTaskSave.setReminderTimeDays(1);
     client = clientRepository.save(client);
@@ -115,29 +135,41 @@ public class ParentTasksTest {
 
   }
 
-  private static @NotNull ParentTask getParentTask1(Client client) {
-    ParentTask parentTaskSave = new ParentTask();
-    parentTaskSave.setName("test");
-    parentTaskSave.setDateStart(Instant.EPOCH);
-    parentTaskSave.setTaskFrequency(TaskFrequency.MONTHLY);
-    parentTaskSave.setReminderTimeDays(1);
-    parentTaskSave.setClient(client);
-    return parentTaskSave;
-  }
-  private static @NotNull ParentTask getParentTask2(Client client) {
-    ParentTask parentTaskSave = new ParentTask();
-    parentTaskSave.setName("test22");
-    parentTaskSave.setDateStart(Instant.EPOCH);
-    parentTaskSave.setTaskFrequency(TaskFrequency.YEARLY);
-    parentTaskSave.setReminderTimeDays(15);
-    parentTaskSave.setClient(client);
-    return parentTaskSave;
+  @Test
+  void UpdateParentTask_ShouldUpdateParentTask() throws Exception {
+    Client client = addClient();
+    client = clientRepository.save(client);
+    ParentTask parentTaskSave = getParentTask1(client);
+    parentTaskSave = parentTasksRepository.save(parentTaskSave);
+    mockMvc.perform(MockMvcRequestBuilders.patch("/api/parent/" + parentTaskSave.getId())
+            .contentType("application/json")
+            .content("""
+                {
+                  "name": "updatedName",
+                  "dateStart": "2022-01-01",
+                  "taskFrequency": "YEARLY",
+                  "reminderTimeDays": 5
+                }
+                """))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("updatedName"))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.dateStart").value("2022-01-01"))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.taskFrequency").value("YEARLY"))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.reminderTimeDays").value(5));
+
+    Optional<ParentTask> fromDb = parentTasksRepository.findById(parentTaskSave.getId());
+    Assertions.assertFalse(fromDb.isEmpty());
+    ParentTask taskFromDb = fromDb.get();
+    Assertions.assertEquals("updatedName", taskFromDb.getName());
+    Assertions.assertEquals(taskFromDb.getDateStart(), LocalDate.parse("2022-01-01"));
+    Assertions.assertEquals(taskFromDb.getTaskFrequency(), TaskFrequency.YEARLY);
+    Assertions.assertEquals(5, taskFromDb.getReminderTimeDays());
   }
 
   private Client addClient() {
     Client client = new Client();
     client.setName("test");
-    client.setCreationDate(EPOCH);
+    client.setCreationDate(LocalDate.EPOCH);
     return clientRepository.save(client);
   }
 }

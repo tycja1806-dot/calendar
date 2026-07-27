@@ -10,10 +10,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.taxcalendar.TaskFrequency;
 import org.example.taxcalendar.client.Client;
 
 /**
@@ -33,9 +33,9 @@ public class ParentTask {
   @Column(name = "name")
   private String name;
   @Column(name = "start_date")
-  private Instant dateStart;
+  private LocalDate dateStart;
   @Column(name = "deactivated_date")
-  private Instant dateDeactivated;
+  private LocalDate dateDeactivated;
   @Column(name = "frequency")
   private TaskFrequency taskFrequency;
   @Column(name = "reminder_time_days")
