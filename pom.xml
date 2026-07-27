@@ -69,6 +69,7 @@
             <id>prepare-agent</id>
           </execution>
           <execution>
+            <id>report</id>
             <configuration>
               <formats>
                 <format>XML</format>
@@ -77,7 +78,13 @@
             <goals>
               <goal>report</goal>
             </goals>
-            <id>report</id>
+          </execution>
+          <execution>
+            <id>create-report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
           </execution>
         </executions>
         <groupId>org.jacoco</groupId>
