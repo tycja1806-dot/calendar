@@ -1,10 +1,10 @@
-package org.example.taxcalendar;
+package org.example.taxcalendar.parenttasks;
 
 /**
  * This is enum with frequency tasks in the database.
  *
  */
-public enum TaskFreuquency {
+public enum TaskFrequency {
 
   MONTHLY,
   YEARLY,

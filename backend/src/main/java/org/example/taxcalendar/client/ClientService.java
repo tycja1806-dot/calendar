@@ -2,6 +2,7 @@ package org.example.taxcalendar.client;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.taxcalendar.client.dto.ClientRequest;
@@ -19,6 +20,11 @@ public class ClientService {
 
   private final ClientRepository clientRepository;
 
+  public static ClientResponse changeClientToClientResponse(Client client) {
+    return new ClientResponse(client.getId(), client.getName(), client.getCreationDate(),
+        client.getDateDeactivated());
+  }
+
   /**
    * Method for adding {@link Client} with trimmed name to {@link ClientRepository}.
    *
@@ -28,14 +34,9 @@ public class ClientService {
   public ClientResponse addClient(ClientRequest clientRequest) {
     Client client = new Client();
     client.setName(clientRequest.name().trim());
-    client.setCreationDate(Instant.now());
+    client.setCreationDate(LocalDate.now());
     client = clientRepository.save(client);
     return changeClientToClientResponse(client);
-  }
-
-  private ClientResponse changeClientToClientResponse(Client client) {
-    return new ClientResponse(client.getId(), client.getName(), client.getCreationDate(),
-        client.getDateDeactivated());
   }
 
   /**
@@ -44,7 +45,8 @@ public class ClientService {
    * @return List of {@link ClientResponse} of all clients in database.
    */
   public List<ClientResponse> getClients() {
-    return clientRepository.findAll().stream().map(this::changeClientToClientResponse).toList();
+    return clientRepository.findAll().stream().map(ClientService::changeClientToClientResponse)
+        .toList();
 
   }
 

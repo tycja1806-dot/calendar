@@ -2,17 +2,18 @@ CREATE TABLE "clients"
 (
     id                BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name              TEXT      NOT NULL,
-    creation_date     TIMESTAMP NOT NULL,
-    deactivation_date TIMESTAMP
+    creation_date     DATE NOT NULL,
+    deactivation_date DATE
 
 );
 
 CREATE TABLE "liabilities-of-clients"
 (
     id                 BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name               TEXT      NOT NULL,
     client_id          BIGINT    NOT NULL,
-    start_date         TIMESTAMP NOT NULL,
-    deactivated_date   TIMESTAMP,
+    start_date         DATE NOT NULL,
+    deactivated_date   DATE,
     frequency          SMALLINT,
     reminder_time_days INT       NOT NULL DEFAULT (7),
     CONSTRAINT fk_liability_client

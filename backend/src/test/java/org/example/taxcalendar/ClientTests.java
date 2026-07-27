@@ -1,9 +1,8 @@
 package org.example.taxcalendar;
 
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Optional;
 import org.example.taxcalendar.client.Client;
 import org.example.taxcalendar.client.ClientRepository;
@@ -154,7 +153,7 @@ public class ClientTests {
     mockMvc.perform(MockMvcRequestBuilders.patch("/api/clients/" + client.getId())
             .contentType("application/json").content(json)).andExpect(status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("testUpdate")).andExpect(
-            MockMvcResultMatchers.jsonPath("$.dateDeactivated").value("2026-01-01T01:00:00Z"));
+            MockMvcResultMatchers.jsonPath("$.dateDeactivated").value("2026-01-01"));
     Optional<Client> foundClient = clientRepository.findById(client.getId());
     Assertions.assertTrue(foundClient.isPresent());
     Assertions.assertEquals("testUpdate", foundClient.get().getName());
@@ -178,14 +177,14 @@ public class ClientTests {
   private Client getClient1() {
     Client client = new Client();
     client.setName("test1");
-    client.setCreationDate(Instant.now());
+    client.setCreationDate(LocalDate.parse("2025-01-01"));
     return client;
   }
 
   private Client getClient2() {
     Client client = new Client();
     client.setName("test2");
-    client.setCreationDate(Instant.EPOCH);
+    client.setCreationDate(LocalDate.EPOCH);
     return client;
   }
 

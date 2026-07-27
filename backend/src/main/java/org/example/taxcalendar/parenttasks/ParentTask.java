@@ -1,4 +1,4 @@
-package org.example.taxcalendar;
+package org.example.taxcalendar.parenttasks;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,12 +30,14 @@ public class ParentTask {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  @Column(name = "name")
+  private String name;
   @Column(name = "start_date")
-  private Instant dateStart;
+  private LocalDate dateStart;
   @Column(name = "deactivated_date")
-  private Instant dateDeactivated;
+  private LocalDate dateDeactivated;
   @Column(name = "frequency")
-  private TaskFreuquency taskFreuquency;
+  private TaskFrequency taskFrequency;
   @Column(name = "reminder_time_days")
   private Integer reminderTimeDays;
   @ManyToOne(fetch = FetchType.EAGER)
