@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service for {@link ParentTask} operations.
  */
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -64,10 +63,16 @@ public class ParentTaskService {
 
   public List<ParentTaskResponse> getParentTaskAll() {
     List<ParentTask> parentTask = parentTaskRepository.findAll().stream().toList();
-    return parentTask.stream().map(this::mapToParentTaskResponse).toList();
+    return parentTask.stream().map(ParentTaskService::mapToParentTaskResponse).toList();
   }
 
-  private ParentTaskResponse mapToParentTaskResponse(ParentTask parentTask) {
+  /**
+   * Method for mapping a {@link ParentTask} to a {@link ParentTaskResponse}.
+   *
+   * @param parentTask the parent task to map.
+   * @return the mapped {@link ParentTaskResponse}.
+   */
+  public static ParentTaskResponse mapToParentTaskResponse(ParentTask parentTask) {
     return new ParentTaskResponse(
         parentTask.getId(),
         parentTask.getName(),
@@ -86,7 +91,6 @@ public class ParentTaskService {
    * @param id                      the id of the parent task to update.
    * @return the updated parent task response.
    */
-
   @Transactional
   public ParentTaskResponse updateParentTask(ParentTaskRequestUpdate parentTaskRequestUpdate,
       Long id) {
