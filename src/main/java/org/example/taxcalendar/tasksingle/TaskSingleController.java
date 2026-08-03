@@ -1,10 +1,13 @@
 package org.example.taxcalendar.tasksingle;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.taxcalendar.tasksingle.dto.TaskSingleResponse;
+import org.example.taxcalendar.tasksingle.dto.TaskSingleUpdate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -29,5 +32,10 @@ public class TaskSingleController {
     return taskSingleService.getTasksSingleResponsesAll();
   }
 
-
+  @PatchMapping("/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  public TaskSingleResponse editTaskSingle(@PathVariable Long id,
+      @Valid TaskSingleUpdate taskSingleUpdate) {
+    return taskSingleService.editTaskSingle(id, taskSingleUpdate);
+  }
 }
