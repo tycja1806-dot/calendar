@@ -23,7 +23,7 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 @SpringBootTest
 @Testcontainers
 @AutoConfigureMockMvc
-public class ClientTests {
+class ClientTests {
 
   @Container
   @ServiceConnection

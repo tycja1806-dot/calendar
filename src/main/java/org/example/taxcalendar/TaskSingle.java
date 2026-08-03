@@ -4,7 +4,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.sql.Date;
+import java.time.LocalDate;
 import lombok.NoArgsConstructor;
 import org.example.taxcalendar.parenttasks.ParentTask;
 import org.example.taxcalendar.parenttasks.TaskFrequency;
@@ -22,10 +22,10 @@ public class TaskSingle {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String nameTask;
-  private Date dateCompletion;
-  private Date deadline;
+  private LocalDate dateCompletion;
+  private LocalDate deadline;
   private TaskFrequency taskFrequency;
-  private Date deactivationDate;
+  private LocalDate deactivationDate;
   @ManyToOne
   private ParentTask parentTask;
 

@@ -1,6 +1,5 @@
 package org.example.taxcalendar.parenttasks;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +24,10 @@ public class ParentTaskService {
   private final ClientRepository clientRepository;
   private final ParentTasksRepository parentTaskRepository;
 
+  public static String generateExceptionMessage(long id) {
+    return "Parent task with id %d not found".formatted(id);
+  }
+
   /**
    * Method for creating new {@link ParentTask} with trimmed name to {@link ParentTasksRepository}.
    *
@@ -36,7 +39,7 @@ public class ParentTaskService {
     ParentTask parentTask = new ParentTask();
     Client client = clientRepository.findById(parentTaskRequest.clientId())
         .orElseThrow(() -> new IllegalArgumentException(
-            "Client with id " + parentTaskRequest.clientId() + " not found"));
+            ClientService.generateNotFoundMessage(parentTaskRequest.clientId())));
     parentTask.setName(parentTaskRequest.name());
     parentTask.setTaskFrequency(parentTaskRequest.taskFrequency());
     parentTask.setClient(client);
@@ -55,7 +58,7 @@ public class ParentTaskService {
   public ParentTaskResponse getParentTaskId(Long id) {
     ParentTask parentTask = parentTaskRepository.findById(id)
         .orElseThrow(
-            () -> new IllegalArgumentException("Parent task with id " + id + " not found"));
+            () -> new IllegalArgumentException(generateExceptionMessage(id)));
     return mapToParentTaskResponse(parentTask);
   }
 
@@ -75,11 +78,12 @@ public class ParentTaskService {
         ClientService.changeClientToClientResponse(parentTask.getClient())
     );
   }
+
   /**
    * Method for update {@link ParentTask} by id.
    *
    * @param parentTaskRequestUpdate update request for the parent task.
-   * @param id the id of the parent task to update.
+   * @param id                      the id of the parent task to update.
    * @return the updated parent task response.
    */
 
@@ -88,7 +92,7 @@ public class ParentTaskService {
       Long id) {
     ParentTask parentTaskToUpdate = parentTaskRepository.findById(id)
         .orElseThrow(
-            () -> new IllegalArgumentException("Parent task with id " + id + " not found"));
+            () -> new IllegalArgumentException(generateExceptionMessage(id)));
     String nameUpdate = parentTaskRequestUpdate.name();
     if (nameUpdate != null) {
       parentTaskToUpdate.setName(nameUpdate);

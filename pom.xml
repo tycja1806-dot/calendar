@@ -79,13 +79,6 @@
               <goal>report</goal>
             </goals>
           </execution>
-          <execution>
-            <id>create-report</id>
-            <phase>test</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-          </execution>
         </executions>
         <groupId>org.jacoco</groupId>
         <version>0.8.13</version>

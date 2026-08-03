@@ -31,9 +31,7 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public @ResponseBody ErrorResponse handleValidationException(MethodArgumentNotValidException ex) {
     List<String> errors = new ArrayList<>();
-    ex.getBindingResult().getAllErrors().forEach((error) -> {
-      errors.add(error.getDefaultMessage());
-    });
+    ex.getBindingResult().getAllErrors().forEach(error -> errors.add(error.getDefaultMessage()));
 
     return new ErrorResponse(Instant.now(), HttpStatus.BAD_REQUEST.value(),
         String.join(" ", errors));

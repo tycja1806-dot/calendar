@@ -27,7 +27,7 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 @SpringBootTest
 @Testcontainers
 @AutoConfigureMockMvc
-public class ParentTasksTest {
+class ParentTasksTest {
 
   @Container
   @ServiceConnection
@@ -126,9 +126,9 @@ public class ParentTasksTest {
     Client client = addClient();
     client = clientRepository.save(client);
     ParentTask parentTaskSave = getParentTask1(client);
-    parentTaskSave = parentTasksRepository.save(parentTaskSave);
+    parentTasksRepository.save(parentTaskSave);
     ParentTask parentTaskSave2 = getParentTask2(client);
-    parentTaskSave2 = parentTasksRepository.save(parentTaskSave2);
+    parentTasksRepository.save(parentTaskSave2);
     mockMvc.perform(MockMvcRequestBuilders.get("/api/parent"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(2));
@@ -162,7 +162,7 @@ public class ParentTasksTest {
     ParentTask taskFromDb = fromDb.get();
     Assertions.assertEquals("updatedName", taskFromDb.getName());
     Assertions.assertEquals(taskFromDb.getDateStart(), LocalDate.parse("2022-01-01"));
-    Assertions.assertEquals(taskFromDb.getTaskFrequency(), TaskFrequency.YEARLY);
+    Assertions.assertEquals(TaskFrequency.YEARLY, taskFromDb.getTaskFrequency());
     Assertions.assertEquals(5, taskFromDb.getReminderTimeDays());
   }
 

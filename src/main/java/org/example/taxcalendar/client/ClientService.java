@@ -1,8 +1,8 @@
 package org.example.taxcalendar.client;
 
 import jakarta.persistence.EntityNotFoundException;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.taxcalendar.client.dto.ClientRequest;
@@ -20,6 +20,10 @@ public class ClientService {
 
   private final ClientRepository clientRepository;
 
+  public static String generateNotFoundMessage(long id) {
+    return "Client with id %d not found".formatted(id);
+  }
+
   public static ClientResponse changeClientToClientResponse(Client client) {
     return new ClientResponse(client.getId(), client.getName(), client.getCreationDate(),
         client.getDateDeactivated());
@@ -34,7 +38,7 @@ public class ClientService {
   public ClientResponse addClient(ClientRequest clientRequest) {
     Client client = new Client();
     client.setName(clientRequest.name().trim());
-    client.setCreationDate(LocalDate.now());
+    client.setCreationDate(LocalDate.now(ZoneId.of("UTC")));
     client = clientRepository.save(client);
     return changeClientToClientResponse(client);
   }
@@ -59,7 +63,7 @@ public class ClientService {
    */
   public ClientResponse getClientsId(long id) {
     Client foundClient = clientRepository.findById(id)
-        .orElseThrow(() -> new EntityNotFoundException("Client with id " + id + " not found"));
+        .orElseThrow(() -> new EntityNotFoundException(generateNotFoundMessage(id)));
     return changeClientToClientResponse(foundClient);
   }
 
@@ -73,7 +77,7 @@ public class ClientService {
    */
   public ClientResponse updateClient(Long id, ClientUpdate clientUpdate) {
     Client foundClient = clientRepository.findById(id)
-        .orElseThrow(() -> new EntityNotFoundException("Client with id " + id + " not found"));
+        .orElseThrow(() -> new EntityNotFoundException(generateNotFoundMessage(id)));
     if (clientUpdate.name() != null && !clientUpdate.name().isEmpty()) {
       foundClient.setName(clientUpdate.name().trim());
     }
