@@ -64,10 +64,10 @@ public class ParentTaskService {
 
   public List<ParentTaskResponse> getParentTaskAll() {
     List<ParentTask> parentTask = parentTaskRepository.findAll().stream().toList();
-    return parentTask.stream().map(this::mapToParentTaskResponse).toList();
+    return parentTask.stream().map(ParentTaskService::mapToParentTaskResponse).toList();
   }
 
-  private ParentTaskResponse mapToParentTaskResponse(ParentTask parentTask) {
+  public static ParentTaskResponse mapToParentTaskResponse(ParentTask parentTask) {
     return new ParentTaskResponse(
         parentTask.getId(),
         parentTask.getName(),
